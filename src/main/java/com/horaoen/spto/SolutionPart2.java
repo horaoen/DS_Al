@@ -58,4 +58,71 @@ public class SolutionPart2 {
             }
         }
     }
+
+    int[] countThresholdMap = new int[110];
+
+    public int movingCount(int threshold, int rows, int cols) {
+        boolean[][] f = new boolean[110][110];
+        for (int i = 0; i < countThresholdMap.length; i++)
+            System.out.print(countThresholdMap[i]);
+        return dfsMoving(f, threshold, rows, cols, 0, 0);
+    }
+
+    public int dfsMoving(boolean[][] f, int threshold, int rows, int cols, int i,
+            int j) {
+        // 判断数组边界
+        if (i < 0 || j < 0 || i >= rows || j >= cols ||
+                (countThreshold(i) + countThreshold(j) > threshold) || f[i][j])
+            return 0;
+
+        f[i][j] = true;
+        return 1 + dfsMoving(f, threshold, rows, cols, i + 1, j)
+                + dfsMoving(f, threshold, rows, cols, i - 1, j)
+                + dfsMoving(f, threshold, rows, cols, i, j + 1)
+                + dfsMoving(f, threshold, rows, cols, i, j - 1);
+
+    }
+
+    public int countThreshold(int i) {
+        if (countThresholdMap[i] != 0) {
+            return countThresholdMap[i];
+        }
+        int res = 0;
+        int tmp = i;
+        while (i > 0) {
+            res += (i % 10);
+            i /= 10;
+        }
+        countThresholdMap[tmp] = res;
+        return res;
+    }
+
+    // https://www.nowcoder.com/share/jump/3598551081741094378105
+    public int cutRope(int n) {
+        // write code here
+        int[] ans = new int[70];
+        ans[1] = 1;
+        ans[2] = 2;
+        ans[3] = 3;
+        for (int i = 4; i <= n; i++) {
+            int max = 0;
+            for (int j = 1; j < i; j++) {
+                max = Math.max(max, ans[j] * ans[i - j]);
+            }
+            ans[i] = max;
+        }
+        return ans[n];
+    }
+
+    // https://www.nowcoder.com/share/jump/3598551081741094864602
+    public int NumberOf1(int n) {
+        int ans = 0;
+
+        for (int i = 1; i <= 32; i++) {
+            if ((n & (1 << i)) != 0) {
+                ans++;
+            }
+        }
+        return ans;
+    }
 }
