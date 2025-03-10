@@ -1,8 +1,10 @@
 package com.horaoen.spto;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 
 public class SolutionPart3 {
     // https://www.nowcoder.com/share/jump/3598551081741156625780
@@ -149,6 +151,74 @@ public class SolutionPart3 {
             }
             i = nextx;
             j = nexty;
+        }
+        return res;
+    }
+
+    // https://www.nowcoder.com/share/jump/3598551081741611471931
+    Stack<Integer> stack1 = new Stack<>();
+    Stack<Integer> stack2 = new Stack<>();
+
+    public void push(int node) {
+        stack1.push(node);
+        if (stack2.isEmpty() || node <= stack2.peek()) {
+            stack2.push(node);
+        } else {
+            stack2.push(stack2.peek());
+        }
+    }
+
+    public void pop() {
+        stack1.pop();
+        stack2.pop();
+    }
+
+    public int top() {
+        return stack1.peek();
+    }
+
+    public int min() {
+        return stack2.peek();
+    }
+
+    // https://www.nowcoder.com/share/jump/3598551081741616688524
+    public boolean IsPopOrder(int[] pushV, int[] popV) {
+        // write code here
+        Stack<Integer> stack = new Stack<>();
+
+        int index = 0;
+        for (int i = 0; i < popV.length; i++) {
+            while (index < pushV.length && (stack.isEmpty() || stack.peek() != popV[i])) {
+                stack.push(pushV[index]);
+                index++;
+            }
+            if (stack.peek() == popV[i]) {
+                stack.pop();
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // https://www.nowcoder.com/share/jump/3598551081741617734781
+    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
+        ArrayList<Integer> res = new ArrayList<>();
+        // bfs
+        ArrayDeque<TreeNode> deque = new ArrayDeque<>();
+        if (root == null)
+            return res;
+        deque.add(root);
+
+        while (!deque.isEmpty()) {
+            TreeNode node = deque.pop();
+            res.add(node.val);
+            if (node.left != null) {
+                deque.add(node.left);
+            }
+            if (node.right != null) {
+                deque.add(node.right);
+            }
         }
         return res;
     }
