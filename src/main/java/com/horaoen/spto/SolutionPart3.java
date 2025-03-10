@@ -1,5 +1,6 @@
 package com.horaoen.spto;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -111,4 +112,45 @@ public class SolutionPart3 {
         }
         return false;
     }
+
+    // https://www.nowcoder.com/share/jump/3598551081741573512833
+    public TreeNode Mirror(TreeNode pRoot) {
+        if (pRoot == null)
+            return null;
+        TreeNode tmpNode = pRoot.left;
+        pRoot.left = Mirror(pRoot.right);
+        pRoot.right = Mirror(tmpNode);
+        return pRoot;
+    }
+
+    // https://www.nowcoder.com/share/jump/3598551081741577723549
+    public ArrayList<Integer> printMatrix(int[][] matrix) {
+        // 循环右下左上
+        int[] x = { 0, 1, 0, -1 };
+        int[] y = { 1, 0, -1, 0 };
+
+        boolean[][] f = new boolean[matrix.length][matrix[0].length];
+        int index = 0;
+        int i = 0, j = 0;
+        ArrayList<Integer> res = new ArrayList<>();
+        while (i < matrix.length && i >= 0 && j >= 0 && j < matrix[0].length && !f[i][j]) {
+            res.add(matrix[i][j]);
+            f[i][j] = true;
+            int count = 0;
+            int nextx = i + x[index];
+            int nexty = j + y[index];
+            while (((nextx < 0 || nexty < 0 || nextx >= matrix.length || nexty >= matrix[0].length) || f[nextx][nexty])
+                    &&
+                    count < 4) {
+                index = (index + 1) % 4;
+                nextx = i + x[index];
+                nexty = j + y[index];
+                count++;
+            }
+            i = nextx;
+            j = nexty;
+        }
+        return res;
+    }
+
 }
