@@ -2,7 +2,10 @@ package com.horaoen.spto;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -223,4 +226,52 @@ public class SolutionPart3 {
         return res;
     }
 
+    // https://www.nowcoder.com/share/jump/3598551081741749348917
+    public boolean VerifySquenceOfBST(int[] sequence) {
+        if (sequence.length == 0)
+            return false;
+        Stack<Integer> stack = new Stack<>();
+        int root = Integer.MAX_VALUE;
+        for (int i = sequence.length - 1; i >= 0; i--) {
+            if (sequence[i] > root)
+                return false;
+            while (!stack.isEmpty() && stack.peek() > sequence[i]) {
+                root = stack.pop();
+            }
+            stack.push(sequence[i]);
+        }
+        return true;
+    }
+
+    public class RandomListNode {
+        int label;
+        RandomListNode next = null;
+        RandomListNode random = null;
+
+        RandomListNode(int label) {
+            this.label = label;
+        }
+    }
+
+    // https://www.nowcoder.com/share/jump/3598551081741751131409
+    public RandomListNode Clone(RandomListNode head) {
+        Map<RandomListNode, RandomListNode> map = new HashMap<>();
+        RandomListNode dummy = new RandomListNode(-1);
+        RandomListNode tail = dummy, tmp = head;
+        while (tmp != null) {
+            RandomListNode node = new RandomListNode(tmp.label);
+            map.put(tmp, node);
+            tail.next = node;
+            tail = tail.next;
+            tmp = tmp.next;
+        }
+        tail = dummy.next;
+        while (head != null) {
+            if (head.random != null)
+                tail.random = map.get(head.random);
+            tail = tail.next;
+            head = head.next;
+        }
+        return dummy.next;
+    }
 }
